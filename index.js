@@ -983,7 +983,7 @@ const data = [
         "attendance_id": 12039091,
         "tiss_type": "GHI",
         "procedure_id": 20171,
-        "group_key": "P_20171_F_13346222_IDX_0",
+        "group_key": "P_2X0171_F_13346222_ID_0",
         "received_value": null,
         "price": 0,
         "liquid_price": 0,
@@ -5127,20 +5127,21 @@ const data = [
     }
 ]
 
-//466
+//466       163518
 
-const filter = (key, value) => {
-    const dataFiltered = data.filter( obj => {
-        if(obj[key] === value){
-            return obj;
+const filter = key => {
+    let amount = {};
+    
+    data.filter( obj => {
+        if(obj[key]){
+            amount[obj[key]] = 0;
+            if(amount.hasOwnProperty([obj[key]])){
+                delete amount[obj[key]];
+            }
         }
     });
 
-    const procedure_id = {
-        value: dataFiltered.length
-    };
-
-    console.log(procedure_id);
+    console.log(Object.keys(amount).length);
 };
 
-filter('procedure_id', 20171);
+filter('procedure_id');
