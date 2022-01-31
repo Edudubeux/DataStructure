@@ -5127,21 +5127,58 @@ const data = [
     }
 ]
 
-//466       163518
+//466
 
-const filter = key => {
-    let amount = {};
-    
-    data.filter( obj => {
-        if(obj[key]){
+const filter = (key, priceType) => {
+    const amount = {};
+    const price = {};
+
+    data.forEach(obj => {
+        if (!amount[obj[key]]) {
             amount[obj[key]] = 0;
-            if(amount.hasOwnProperty([obj[key]])){
-                delete amount[obj[key]];
+        }
+        amount[obj[key]]++;
+
+
+        if (key === 'procedure_id' && priceType) {
+            if (!price[obj.procedure_id]) {
+                price[obj.procedure_id] = 0;
             }
+            price[obj.procedure_id] += (priceType === 'not_recieved_value' ? (obj['liquid_price'] - obj['received_value']) : obj[priceType]);
         }
     });
 
-    console.log(Object.keys(amount).length);
+    console.log(`${priceType} agrupado por ${key}: \n`, price);
+    console.log(`Procedimentos agrupados por ${key}: \n`, amount);
 };
 
-filter('procedure_id');
+filter('procedure_id', 'not_recieved_value');
+
+
+// const filter = (key, priceType) => {
+//     return data.reduce((acc, obj) => {
+//         if (!acc.amount[obj[key]]) {
+//             acc.amount[obj[key]] = 0;
+//         }
+//         acc.amount[obj[key]]++;
+
+
+//         if (key === 'procedure_id' && priceType) {
+//             if (!acc.price[obj.procedure_id]) {
+//                 acc.price[obj.procedure_id] = 0;
+//             }
+
+//             acc.price[obj.procedure_id] += (priceType === 'not_recieved_value' ? (obj['liquid_price'] - obj['received_value']) : obj[priceType]);
+//         }
+
+//         return acc;
+//     }, {
+//         amount: {},
+//         price: {}
+//     });
+//     // console.log(`Procedimentos agrupados por ${key}: \n`, amount);
+// };
+
+// const mountedFilterByKey = filter('procedure_id', 'not_recieved_value');
+
+// console.log(mountedFilterByKey, 'mountedFilterByKey');
