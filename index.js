@@ -5127,11 +5127,10 @@ const data = [
     }
 ]
 
-//466
-
 const filter = (key, priceType) => {
     const amount = {};
     const price = {};
+    const procedureGroup = {};
 
     data.forEach(obj => {
         if (!amount[obj[key]]) {
@@ -5139,6 +5138,10 @@ const filter = (key, priceType) => {
         }
         amount[obj[key]]++;
 
+        if(key === ('finance_id' || 'attendance_id') && !procedureGroup[obj[key]]){
+            procedureGroup[obj[key]] = [];
+        }
+        procedureGroup[obj[key]].push(obj) 
 
         if (key === 'procedure_id' && priceType) {
             if (!price[obj.procedure_id]) {
@@ -5148,14 +5151,16 @@ const filter = (key, priceType) => {
         }
     });
 
-    console.log(`${priceType} agrupado por ${key}: \n`, price);
-    console.log(`Procedimentos agrupados por ${key}: \n`, amount);
+    // console.log(`Quantidade de procediment os agrupados por ${key}:\n`, amount);
+    // console.log(`${priceType} agrupado por ${key}: \n`, price);
+    console.log(`Procedimentos agrupados por ${key}: \n`, procedureGroup);
 };
 
-filter('procedure_id', 'not_recieved_value');
+filter('finance_id', 'not_recieved_value');
 
 
-// const filter = (key, priceType) => {
+//#######################################################################################################
+// const filter = (key, priceType) => {  
 //     return data.reduce((acc, obj) => {
 //         if (!acc.amount[obj[key]]) {
 //             acc.amount[obj[key]] = 0;
