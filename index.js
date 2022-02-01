@@ -5138,26 +5138,29 @@ const filter = (key, priceType) => {
         }
         amount[obj[key]]++;
 
-        if(key === ('finance_id' || 'attendance_id') && !procedureGroup[obj[key]]){
-            procedureGroup[obj[key]] = [];
+        if (key === 'finance_id' || key === 'attendance_id') {
+            if (!procedureGroup[obj[key]]) {
+                procedureGroup[obj[key]] = [];
+            }
+
+            procedureGroup[obj[key]].push(obj);
         }
-        procedureGroup[obj[key]].push(obj) 
 
         if (key === 'procedure_id' && priceType) {
             if (!price[obj.procedure_id]) {
                 price[obj.procedure_id] = 0;
             }
+
             price[obj.procedure_id] += (priceType === 'not_recieved_value' ? (obj['liquid_price'] - obj['received_value']) : obj[priceType]);
         }
     });
 
-    // console.log(`Quantidade de procediment os agrupados por ${key}:\n`, amount);
-    // console.log(`${priceType} agrupado por ${key}: \n`, price);
+    console.log(`Quantidade de procedimentos agrupados por ${key}:\n`, amount);
+    console.log(`${priceType} agrupado por ${key}: \n`, price);
     console.log(`Procedimentos agrupados por ${key}: \n`, procedureGroup);
 };
 
-filter('finance_id', 'not_recieved_value');
-
+filter('finance_id'); 
 
 //#######################################################################################################
 // const filter = (key, priceType) => {  
